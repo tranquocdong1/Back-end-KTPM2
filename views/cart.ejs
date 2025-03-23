@@ -111,10 +111,19 @@
 <script src="js/jquery-migrate-3.0.1.min.js"></script>
 <script src="js/popper.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/cart.js"></script>
 
 <script>
     $(document).ready(function () {
+        // Hàm để làm chậm việc thực thi lệnh (debounce)
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+
         // Hàm cập nhật tổng giỏ hàng
         function updateCartTotals(subtotal) {
             $('#subtotal').text('$' + subtotal);
@@ -148,25 +157,41 @@
             });
         });
 
-        // Cập nhật tổng khi thay đổi số lượng (nếu cần)
-        $('input[name="quantity"]').on('change', function () {
+        // Cập nhật số lượng và tổng khi thay đổi số lượng
+        $('input[name="quantity"]').on('change', debounce(function () {
             const row = $(this).closest('tr');
-            const price = parseFloat(row.find('td:nth-child(4)').text().replace('$', ''));
+            const productId = row.find('input[name="productId"]').val();
             const quantity = parseInt($(this).val());
-            row.find('.total-price').text('$' + (price * quantity).toFixed(2));
-
-            // Tính tổng tiền mới từ frontend (nếu không gọi lại server)
-            let subtotal = 0;
-            $('tr.alert').each(function () {
-                const rowPrice = parseFloat($(this).find('td:nth-child(4)').text().replace('$', ''));
-                const rowQuantity = parseInt($(this).find('input[name="quantity"]').val());
-                subtotal += rowPrice * rowQuantity;
-            });
-
-            updateCartTotals(subtotal.toFixed(2));
-        });
-
             
+            if (quantity < 1) {
+                $(this).val(1);
+                return;
+            }
+            
+            // Cập nhật tổng cho sản phẩm này trong giao diện trước
+            const price = parseFloat(row.find('td:nth-child(4)').text().replace('$', ''));
+            const newItemTotal = (price * quantity).toFixed(2);
+            row.find('.total-price').text('$' + newItemTotal);
+            
+            // Gửi cập nhật đến máy chủ
+            $.ajax({
+                url: '/update-cart-quantity',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ productId, quantity }),
+                success: function (response) {
+                    // Cập nhật tổng giỏ hàng từ dữ liệu trả về
+                    updateCartTotals(response.subtotal);
+                },
+                error: function (err) {
+                    console.error('Error updating quantity:', err);
+                    alert('Không thể cập nhật số lượng. Vui lòng thử lại.');
+                    
+                    // Tải lại trang nếu có lỗi
+                    location.reload();
+                }
+            });
+        }, 500)); // 500ms khoảng thời gian chờ
     });
 </script>
 

@@ -1,45 +1,52 @@
 import Checkout from "../models/checkout.mjs";
+import Cart from "../models/cart.mjs"; // Import model Cart
 
 // Show the checkout page
-export const checkOutPage = (req, res) => {
-  res.render('checkout');  // Render the checkout page
+export const checkOutPage = async (req, res) => {
+  try {
+    // Lấy userId từ session hoặc header (tùy cách xác thực của bạn)
+    const userId = req.session.userId || req.headers['x-user-id'];
+    if (!userId) {
+      return res.status(401).send('Vui lòng đăng nhập để tiếp tục');
+    }
+
+    // Lấy thông tin giỏ hàng của người dùng
+    const cart = await Cart.findOne({ userId }).populate('items.productId');
+
+    let subtotal = 0;
+    let cartItems = [];
+    if (cart && cart.items) {
+      cartItems = cart.items
+        .filter(item => item.productId) // Lọc bỏ các item không hợp lệ
+        .map(item => {
+          const itemSubtotal = item.productId.price * item.quantity;
+          subtotal += itemSubtotal;
+          return {
+            productId: item.productId._id,
+            name: item.productId.name,
+            price: item.productId.price,
+            quantity: item.quantity,
+            image: item.productId.image,
+            subtotal: itemSubtotal.toFixed(2),
+          };
+        });
+    }
+
+    // Thêm phí vận chuyển và tính tổng
+    const deliveryFee = 10.99; // Phí vận chuyển cố định
+    const discount = 0.00; // Giảm giá (nếu có)
+    const total = subtotal + deliveryFee - discount;
+
+    // Render trang checkout với dữ liệu giỏ hàng
+    res.render('checkout', {
+      cartItems,
+      subtotal: subtotal.toFixed(2),
+      deliveryFee: deliveryFee.toFixed(2),
+      discount: discount.toFixed(2),
+      total: total.toFixed(2),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Lỗi khi tải trang checkout');
+  }
 };
-
-// // Get checkout details by ID
-// export const getCheckoutDetail = async (req, res) => {
-//   try {
-//     const checkout = await Checkout.findById(req.params.id);
-//     if (!checkout) {
-//       return res.status(404).send('Checkout not found');
-//     }
-//     res.render('checkout-detail', { checkout });  // Render checkout details page
-//   } catch (error) {        
-//     res.status(500).send('Error fetching checkout details');
-//   }
-// };
-
-// // Create a new checkout order
-// export const createCheckout = async (req, res) => {
-//   try {
-//     const { firstname, lastname, phone, email } = req.body;
-//     const newCheckout = new Checkout({ firstname, lastname, phone, email });
-//     await newCheckout.save();
-//     res.status(201).json({ message: 'Checkout order created successfully!' });
-//   } catch (error) {
-//     res.status(500).send('Error creating checkout order');
-//   }
-// };
-
-// // Update payment status
-// export const updatePaymentStatus = async (req, res) => {
-//   try {
-//     const { paymentStatus } = req.body;
-//     const checkout = await Checkout.findByIdAndUpdate(req.params.id, { paymentStatus }, { new: true });
-//     if (!checkout) {
-//       return res.status(404).send('Checkout order not found');
-//     }
-//     res.status(200).json({ message: 'Payment status updated successfully!' });
-//   } catch (error) {
-//     res.status(500).send('Error updating payment status');
-//   }
-// };
