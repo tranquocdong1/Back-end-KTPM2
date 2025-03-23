@@ -1,0 +1,160 @@
+<%- include('layouts/header'); %>
+  <!-- views/blog.ejs -->
+  <!DOCTYPE html>
+  <html>
+
+  <head>
+    <title>Blog</title>
+    <style>
+      /* Đặt kiểu cho container chứa blog */
+      .blog-container {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Định dạng cho lưới blog */
+      .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      /* Định dạng cho mỗi mục blog */
+      .blog-item {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Định dạng ảnh trong mỗi mục blog */
+      .blog-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 1px solid #ddd;
+      }
+
+      /* Định dạng phần nội dung blog */
+      .blog-content {
+        padding: 15px;
+      }
+
+      /* Định dạng cho ngày tháng */
+      .blog-date {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 10px;
+      }
+
+      /* Định dạng cho tiêu đề blog */
+      .blog-title {
+        font-size: 20px;
+        color: #333;
+        margin: 0 0 10px 0;
+      }
+
+      /* Định dạng cho mô tả blog */
+      .blog-description {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 15px;
+      }
+
+      /* Định dạng cho liên kết "Continue" */
+      .blog-continue {
+        font-size: 16px;
+        color: #ff6347;
+        text-decoration: none;
+      }
+
+      .blog-continue:hover {
+        text-decoration: underline;
+      }
+
+      /* Định dạng cho phần phân trang */
+      .pagination {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .pagination a {
+        padding: 8px 16px;
+        margin: 0 5px;
+        text-decoration: none;
+        background-color: #f0f0f0;
+        border-radius: 4px;
+        color: #333;
+      }
+
+      .pagination a.active {
+        background-color: #ff6347;
+        color: white;
+      }
+
+      .pagination a:hover {
+        background-color: #ddd;
+      }
+    </style>
+  </head>
+  <section class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_2.jpg');"
+    data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text align-items-end justify-content-center">
+        <div class="col-md-9 ftco-animate mb-5 text-center">
+          <p class="breadcrumbs mb-0"><span class="mr-2"><a href="index.html">Home <i
+                  class="fa fa-chevron-right"></i></a></span> <span>Blog <i class="fa fa-chevron-right"></i></span></p>
+          <h2 class="mb-0 bread">Blog</h2>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <body>
+    <div class="blog-container">
+      <div class="blog-grid">
+        <% if (blogs && blogs.length> 0) { %>
+          <% blogs.forEach(function(blog) { %>
+            <div class="blog-item">
+              <img src="/images/<%= blog.image || 'placeholder.jpg' %>" alt="<%= blog.title %>" class="blog-image">
+              <div class="blog-content">
+                <div class="blog-date">
+                  <i class="far fa-calendar"></i>
+                  <%= blog.date ? blog.date.toLocaleDateString() : 'No date' %>
+                </div>
+                <h3 class="blog-title">
+                  <%= blog.title %>
+                </h3>
+                <p class="blog-description">
+                  <%= blog.description %>
+                </p>
+                <a href="/blog/<%= blog._id %>" class="blog-continue">Continue →</a>
+              </div>
+            </div>
+            <% }); %>
+              <% } else { %>
+                <div class="no-blogs">
+                  <p>No blogs found.</p>
+                </div>
+                <% } %>
+      </div>
+
+      <div class="pagination">
+        <a href="#" class="active">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+        <a href="#">→</a>
+      </div>
+    </div>
+
+    <!-- Add Font Awesome for calendar icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  </body>
+
+  </html>
+  <%- include('layouts/footer'); %>

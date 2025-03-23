@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    main {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #4CAF50;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      color: #4CAF50;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Edit Product</h1>
+  </header>
+  <main>
+    <form method="post" action="/admin/products/update/<%= product._id %>">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" value="<%= product.name %>" required>
+
+      <label for="category">Category:</label>
+      <input type="text" id="category" name="category" value="<%= product.category %>" required>
+
+      <label for="price">Price:</label>
+      <input type="number" id="price" name="price" value="<%= product.price %>" required>
+
+      <label for="originalPrice">Original Price:</label>
+      <input type="number" id="originalPrice" name="originalPrice" value="<%= product.originalPrice %>">
+
+      <label for="image">Image URL:</label>
+      <input type="text" id="image" name="image" value="<%= product.image %>" required>
+
+      <label>
+        <input type="checkbox" id="sale" name="sale" value="on" <%= product.sale ? "checked" : "" %>>
+        Sale
+      </label>
+
+      <label>
+        <input type="checkbox" id="newArrival" name="newArrival" value="on" <%= product.newArrival ? "checked" : "" %>>
+        New Arrival
+      </label>
+
+      <label>
+        <input type="checkbox" id="bestSeller" name="bestSeller" value="on" <%= product.bestSeller ? "checked" : "" %>>
+        Best Seller
+      </label>
+
+      <button type="submit">Update Product</button>
+    </form>
+    <a href="/admin/products">Back to Products</a>
+  </main>
+</body>
+</html>

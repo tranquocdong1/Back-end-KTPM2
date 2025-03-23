@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    main {
+      max-width: 500px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="checkbox"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-align: center;
+      color: #4CAF50;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .form-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .form-row label {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Add New Product</h1>
+  </header>
+  <main>
+    <form method="post" action="/admin/products/create">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="category">Category:</label>
+      <input type="text" id="category" name="category" required>
+
+      <label for="price">Price:</label>
+      <input type="number" id="price" name="price" required>
+
+      <label for="originalPrice">Original Price:</label>
+      <input type="number" id="originalPrice" name="originalPrice">
+
+      <label for="image">Image URL:</label>
+      <input type="text" id="image" name="image" required>
+
+      <div class="form-row">
+        <label for="sale">Sale:</label>
+        <input type="checkbox" id="sale" name="sale">
+      </div>
+
+      <div class="form-row">
+        <label for="newArrival">New Arrival:</label>
+        <input type="checkbox" id="newArrival" name="newArrival">
+      </div>
+
+      <div class="form-row">
+        <label for="bestSeller">Best Seller:</label>
+        <input type="checkbox" id="bestSeller" name="bestSeller">
+      </div>
+
+      <button type="submit">Add Product</button>
+    </form>
+    <a href="/admin/products">Back to Products</a>
+  </main>
+</body>
+</html>

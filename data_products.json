@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Cognac Brandy XO",
+    "category": "Brandy",
+    "price": 129.99,
+    "originalPrice": 149.99,
+    "image": "/images/kind-1.png",
+    "sale": true,
+    "newArrival": false,
+    "bestSeller": true,
+    "description": "A premium brandy with a rich and intense flavor.",
+    "content": "Cognac Brandy XO is a perfect blend of ripe fruit flavors and oak wood. Aged in French oak barrels for several years, this product offers a luxurious tasting experience with a smooth and lingering finish. Ideal as a gift or for special occasions."
+  },
+  {
+    "name": "London Dry Gin",
+    "category": "Gin",
+    "price": 29.99,
+    "originalPrice": null,
+    "image": "/images/kind-2.png",
+    "sale": false,
+    "newArrival": true,
+    "bestSeller": false,
+    "description": "A traditional gin with a distinctive herbal aroma.",
+    "content": "London Dry Gin is distilled from natural botanicals like juniper berries, licorice, and citrus peel. It's the perfect choice for classic cocktails like Gin Tonic or Martini. With its balanced and crisp flavor, this gin appeals to those who appreciate sophistication."
+  },
+  {
+    "name": "Aged Dark Rum",
+    "category": "Rum",
+    "price": 49.99,
+    "originalPrice": 59.99,
+    "image": "/images/kind-3.png",
+    "sale": true,
+    "newArrival": false,
+    "bestSeller": true,
+    "description": "A rich and smooth dark rum aged to perfection.",
+    "content": "Aged Dark Rum offers a deep and complex flavor profile with notes of caramel, vanilla, and spice. Crafted through a meticulous aging process in oak barrels, it’s perfect for sipping neat or mixing in premium cocktails. A must-have for rum enthusiasts."
+  },
+  {
+    "name": "Silver Tequila",
+    "category": "Tequila",
+    "price": 35.99,
+    "originalPrice": null,
+    "image": "/images/kind-4.png",
+    "sale": false,
+    "newArrival": true,
+    "bestSeller": false,
+    "description": "A crisp and vibrant tequila for all occasions.",
+    "content": "Silver Tequila is crafted from 100% blue agave and offers a clean, fresh taste with hints of citrus and pepper. Whether enjoyed as a shot, in margaritas, or in other cocktails, this tequila delivers an authentic Mexican experience."
+  },
+  {
+    "name": "Premium Russian Vodka",
+    "category": "Vodka",
+    "price": 55.99,
+    "originalPrice": 65.00,
+    "image": "/images/kind-5.png",
+    "sale": true,
+    "newArrival": false,
+    "bestSeller": true,
+    "description": "A smooth and refined vodka for discerning tastes.",
+    "content": "Premium Russian Vodka is distilled multiple times for exceptional purity and smoothness. Its neutral flavor makes it a versatile choice for a wide range of cocktails or for enjoying neat. A premium choice for vodka lovers."
+  },
+  {
+    "name": "Single Malt Scotch Whisky",
+    "category": "Whisky",
+    "price": 75.99,
+    "originalPrice": 90.00,
+    "image": "/images/kind-6.png",
+    "sale": true,
+    "newArrival": false,
+    "bestSeller": true,
+    "description": "A rich and complex single malt whisky.",
+    "content": "Single Malt Scotch Whisky is crafted using traditional methods and aged in oak barrels for a deep, full-bodied flavor. With notes of smoke, honey, and dried fruits, this whisky is perfect for sipping slowly and savoring the craftsmanship in every drop."
+  }
+]
