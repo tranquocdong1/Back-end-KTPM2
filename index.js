@@ -20,6 +20,12 @@ import singleProductRouter from "./routes/singleProductRoutes.mjs";
 const app = express();
 const port = 3000;
 
+
+app.use('/images', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 app.use(express.static("public"));
 app.use(
   cors({
