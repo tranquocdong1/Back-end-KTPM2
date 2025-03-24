@@ -57,14 +57,15 @@ class HomeController {
       }
 
       req.session.userId = user._id.toString();
+      req.session.user = { name: user.name, email: user.email };
 
-      req.session.save(err => {
-        if (err) return res.status(500).json({ message: 'Lỗi server' });
+      req.session.save((err) => {
+        if (err) return res.status(500).json({ message: "Lỗi server" });
         res.json({
-          message: 'Đăng nhập thành công',
+          message: "Đăng nhập thành công",
           success: true,
           userId: user._id.toString(), // Trả về userId trực tiếp
-          user: user // Giữ nguyên nếu cần
+          user: user, // Giữ nguyên nếu cần
         });
       });
     } catch (error) {
@@ -86,6 +87,45 @@ class HomeController {
       title: "Home Page",
       user: req.session.user,
     });
+  }
+
+  // Trong HomeController
+  static logout(req, res) {
+    try {
+      // Hủy session của người dùng
+      req.session.destroy((err) => {
+        if (err) {
+          console.error("Lỗi khi hủy session:", err);
+          return res
+            .status(500)
+            .json({ success: false, message: "Lỗi server khi đăng xuất." });
+        }
+
+        // Xóa cookie nếu có (tùy cấu hình session của bạn)
+        res.clearCookie("connect.sid"); // "connect.sid" là tên mặc định của session cookie trong Express
+
+        // Trả về phản hồi thành công
+        res
+          .status(200)
+          .json({ success: true, message: "Đăng xuất thành công." });
+      });
+    } catch (error) {
+      console.error("Lỗi trong quá trình đăng xuất:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Lỗi trong quá trình đăng xuất." });
+    }
+  }
+
+  static checkLogin(req, res) {
+    if (req.session.userId) {
+      res.json({
+        isLoggedIn: true,
+        username: req.session.user ? req.session.user.name : "User",
+      });
+    } else {
+      res.json({ isLoggedIn: false });
+    }
   }
 }
 

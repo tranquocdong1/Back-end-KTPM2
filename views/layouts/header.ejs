@@ -33,7 +33,7 @@
                     </div>
                     <div class="greeting" id="greeting-message" style="display:none;">
                         <p class="mb-0 d-flex align-items-center" id="greeting-text" style="color: #4a2c2a; font-weight:bold;">
-                            Hello <span id="username"></span>!
+                            Hello, <span id="username"></span>!
                             <button id="logout-btn" class="btn btn-danger ml-3" onclick="logout()">Log Out</button>
                         </p>
                     </div>
@@ -93,30 +93,54 @@
 
     <script>
         function checkLoginStatus() {
-            const isLoggedIn = true; 
-            if (isLoggedIn) {
-                const username = ""; 
-                document.getElementById("username").textContent = username;
+          // Giả sử bạn có cách kiểm tra trạng thái đăng nhập từ server hoặc session
+          fetch("/check-login", { method: "GET", credentials: "include" })
+            .then(response => response.json())
+            .then(data => {
+              if (data.isLoggedIn) {
+                document.getElementById("username").textContent = data.username || "User";
                 document.getElementById("auth-buttons").style.display = "none";
-                document.getElementById("auth-links").style.display = "none";
                 document.getElementById("greeting-message").style.display = "block";
-            }
+              } else {
+                document.getElementById("auth-buttons").style.display = "block";
+                document.getElementById("greeting-message").style.display = "none";
+              }
+            })
+            .catch(error => console.error("Lỗi kiểm tra trạng thái đăng nhập:", error));
         }
-
+      
         function logout() {
-            $('#logout-modal').modal('show');
+          $("#logout-modal").modal("show");
         }
-
+      
         function logoutConfirmed() {
-            document.getElementById("auth-buttons").style.display = "block";
-            document.getElementById("auth-links").style.display = "block";
-            document.getElementById("greeting-message").style.display = "none";
-            $('#logout-modal').modal('hide');
-            window.location.href = "/login";
+          // Gọi API logout
+          fetch("/logout", {
+            method: "POST",
+            credentials: "include", // Đảm bảo gửi cookie/session
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // Reset giao diện về trạng thái chưa đăng nhập
+                document.getElementById("auth-buttons").style.display = "block";
+                document.getElementById("greeting-message").style.display = "none";
+                $("#logout-modal").modal("hide");
+                // Tải lại trang nếu cần để đảm bảo trạng thái sạch
+                window.location.href = "/";
+              } else {
+                alert(data.message || "Đăng xuất thất bại.");
+              }
+            })
+            .catch(error => {
+              console.error("Lỗi khi đăng xuất:", error);
+              alert("Có lỗi xảy ra khi đăng xuất.");
+            });
         }
-
+      
+        // Gọi khi trang tải
         checkLoginStatus();
-    </script>
+      </script>
 
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery-migrate-3.0.1.min.js"></script>

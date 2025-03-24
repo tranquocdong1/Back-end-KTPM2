@@ -53,7 +53,26 @@ router.get('/order-history', async (req, res) => {
     try {
         const userId = req.session.userId || req.headers['x-user-id'];
         if (!userId) {
-            return res.status(401).send('Vui lòng đăng nhập để tiếp tục');
+            return res.status(401).send(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <title>Unauthorized</title>
+                  <style>
+                    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+                    .btn { padding: 10px 20px; background-color: #d8a7b1; color: white; text-decoration: none; border-radius: 5px; }
+                    .btn:hover { background-color: #b98b94; }
+                  </style>
+                </head>
+                <body>
+                  <h1>Vui lòng đăng nhập để tiếp tục</h1>
+                  <p>Bạn cần đăng nhập để truy cập trang này.</p>
+                  <a href="/login" class="btn">Đăng nhập</a>
+                </body>
+                </html>
+              `);
         }
 
         const orders = await Checkout.find({ userId })
