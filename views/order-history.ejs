@@ -1,0 +1,204 @@
+<%- include('layouts/header'); %>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Liquor Store - Order History</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,700;0,800;1,200;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+    <link rel="stylesheet" href="/css/flaticon.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <section class="hero-wrap hero-wrap-2" style="background-image: url('/images/bg_2.jpg');"
+        data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-end justify-content-center">
+                <div class="col-md-9 ftco-animate mb-5 text-center">
+                    <p class="breadcrumbs mb-0"><span class="mr-2"><a href="/">Home <i
+                                    class="fa fa-chevron-right"></i></a></span> <span>Order History <i
+                                class="fa fa-chevron-right"></i></span></p>
+                    <h2 class="mb-0 bread">Order History</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-10 ftco-animate">
+                    <h3 class="mb-4 billing-heading">Your Order History</h3>
+                    <% if (orders && orders.length> 0) { %>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="thead-primary">
+                                    <tr>
+                                        <th>Order Date</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% orders.forEach(order=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= new Date(order.createdAt).toLocaleDateString() %>
+                                            </td>
+                                            <td>$<%= order.totalPrice.toFixed(2) %>
+                                            </td>
+                                            <td>
+                                                <%= order.status %>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary"
+                                                    data-order='<%- JSON.stringify(order).replace(/'/g, "&#39;") %>'
+                                                    onclick="showOrderDetails(this.getAttribute('data-order'))">View</button>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <% } else { %>
+                            <div class="alert alert-info">
+                                <p>You have no orders yet. <a href="/product" class="btn btn-primary">Start
+                                        Shopping</a></p>
+                            </div>
+                            <% } %>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog"
+        aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="orderDetailsContent">
+                    <!-- Nội dung sẽ được điền bởi JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.easing.1.3.js"></script>
+    <script src="/js/jquery.waypoints.min.js"></script>
+    <script src="/js/jquery.stellar.min.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+    <script src="/js/jquery.animateNumber.min.js"></script>
+    <script src="/js/scrollax.min.js"></script>
+    <script src="/js/main.js"></script>
+
+    <script>
+        function showOrderDetails(orderData) {
+            // Parse the string back to a JSON object
+            const order = JSON.parse(orderData);
+            
+            let productsHtml = '<p>No product details available</p>';
+
+            if (order.products && order.products.length > 0) {
+                productsHtml = `
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+                order.products.forEach(item => {
+                    if (item.productId) {
+                        const subtotal = item.productId.price * item.quantity;
+                        const imageUrl = item.productId.image || '/images/product-placeholder.jpg';
+                        
+                        productsHtml += `
+                        <tr>
+                            <td><img src="${imageUrl}" alt="${item.productId.name || 'Product'}" class="img-thumbnail" style="max-width: 50px;"></td>
+                            <td>${item.productId.name || 'Product Name Not Available'}</td>
+                            <td>${item.quantity}</td>
+                            <td>$${item.productId.price ? item.productId.price.toFixed(2) : '0.00'}</td>
+                            <td>$${subtotal ? subtotal.toFixed(2) : '0.00'}</td>
+                        </tr>`;
+                    } else {
+                        productsHtml += `
+                        <tr>
+                            <td colspan="5">Product information not available</td>
+                        </tr>`;
+                    }
+                });
+
+                productsHtml += `</tbody></table></div>`;
+            }
+
+            const deliveryFee = 10.99;
+            const content = `
+            <div class="container-fluid p-0">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Order Date:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+                        <p><strong>Status:</strong> <span class="badge badge-${getStatusBadgeClass(order.status)}">${order.status}</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Subtotal:</strong> $${(order.totalPrice - deliveryFee).toFixed(2)}</p>
+                        <p><strong>Delivery Fee:</strong> $${deliveryFee.toFixed(2)}</p>
+                        <p><strong>Total:</strong> $${order.totalPrice.toFixed(2)}</p>
+                    </div>
+                </div>
+                <hr>
+                <h5>Order Items:</h5>
+                ${productsHtml}
+            </div>
+            `;
+
+            document.getElementById('orderDetailsContent').innerHTML = content;
+            $('#orderDetailsModal').modal('show');
+        }
+
+        function getStatusBadgeClass(status) {
+            switch (status) {
+                case 'Pending': return 'warning';
+                case 'Processing': return 'info';
+                case 'Shipped': return 'primary';
+                case 'Delivered': return 'success';
+                case 'Cancelled': return 'danger';
+                default: return 'secondary';
+            }
+        }
+    </script>
+</body>
+
+</html>
+
+<%- include('layouts/footer'); %>

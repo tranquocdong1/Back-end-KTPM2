@@ -1,5 +1,5 @@
 import Checkout from "../models/checkout.mjs";
-import Cart from "../models/cart.mjs"; // Import model Cart
+import Cart from "../models/cart.mjs";
 
 // Show the checkout page
 export const checkOutPage = async (req, res) => {

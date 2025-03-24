@@ -1,231 +1,249 @@
 <%- include('layouts/header'); %>
-<section class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_2.jpg');" data-stellar-background-ratio="0.5">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row no-gutters slider-text align-items-end justify-content-center">
-            <div class="col-md-9 ftco-animate mb-5 text-center">
-                <p class="breadcrumbs mb-0"><span class="mr-2"><a href="index.html">Home <i class="fa fa-chevron-right"></i></a></span> <span>Cart <i class="fa fa-chevron-right"></i></span></p>
-                <h2 class="mb-0 bread">My Cart</h2>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="ftco-section">
-    <div class="container">
-        <div class="row">
-            <div class="table-wrap">
-                <table class="table">
-                    <thead class="thead-primary">
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (cart && cart.items.length > 0) { %>
-                            <% cart.items.forEach(item => { %>
-                                <tr class="alert" role="alert">
-                                    <td>
-                                        <input type="hidden" name="productId" value="<%= item.productId ? item.productId._id : '' %>">
-                                        <label class="checkbox-wrap checkbox-primary">
-                                            <input type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <% if (item.productId && item.productId.image) { %>
-                                            <div class="img" style="background-image: url('<%= item.productId.image %>');"></div>
-                                        <% } else { %>
-                                            <div class="img" style="background-image: url('/path/to/default-image.jpg');"></div>
-                                        <% } %>
-                                    </td>
-                                    <td>
-                                        <div class="email">
-                                            <span><%= item.productId ? item.productId.name : 'Không có sản phẩm' %></span>
-                                            <span><%= item.productId ? item.productId.category : 'N/A' %></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        $<%= item.productId ? item.productId.price.toFixed(2) : '0.00' %>
-                                    </td>
-                                    <td class="quantity">
-                                        <div class="input-group">
-                                            <input type="number" name="quantity" class="quantity form-control input-number" value="<%= item.quantity %>" min="1">
-                                        </div>
-                                    </td>
-                                    <td class="total-price">
-                                        $<%= item.productId ? (item.productId.price * item.quantity).toFixed(2) : '0.00' %>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true"><i class="fa fa-close"></i></span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            <% }) %>
-                        <% } else { %>
-                            <tr>
-                                <td colspan="7">Giỏ hàng trống</td>
-                            </tr>
-                        <% } %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Phần tính tổng -->
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table table-footer">
-                    <tfoot>
-                        <tr>
-                            <td colspan="5" class="text-right">Subtotal:</td>
-                            <td class="total-price" id="subtotal">$<%= subtotal %></td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" class="text-right">Total:</td>
-                            <td class="total-price" id="total">$<%= subtotal %></td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div class="text-right">
-                    <button class="btn-checkout bg-black">
-                        <a href="/checkout" style="color: white; font-weight:bold">Proceed to Checkout</a>
-                    </button>
+    <section class="hero-wrap hero-wrap-2" style="background-image: url('images/bg_2.jpg');"
+        data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-end justify-content-center">
+                <div class="col-md-9 ftco-animate mb-5 text-center">
+                    <p class="breadcrumbs mb-0"><span class="mr-2"><a href="index.html">Home <i
+                                    class="fa fa-chevron-right"></i></a></span> <span>Cart <i
+                                class="fa fa-chevron-right"></i></span></p>
+                    <h2 class="mb-0 bread">My Cart</h2>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- JavaScript -->
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery-migrate-3.0.1.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row">
+                <div class="table-wrap">
+                    <table class="table">
+                        <thead class="thead-primary">
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (cart && cart.items.length> 0) { %>
+                                <% cart.items.forEach(item=> { %>
+                                    <tr class="alert" role="alert">
+                                        <td>
+                                            <input type="hidden" name="productId"
+                                                value="<%= item.productId ? item.productId._id : '' %>">
+                                            <label class="checkbox-wrap checkbox-primary">
+                                                <input type="checkbox">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <% if (item.productId && item.productId.image) { %>
+                                                <div class="img"
+                                                    style="background-image: url('<%= item.productId.image %>');"></div>
+                                                <% } else { %>
+                                                    <div class="img"
+                                                        style="background-image: url('/path/to/default-image.jpg');">
+                                                    </div>
+                                                    <% } %>
+                                        </td>
+                                        <td>
+                                            <div class="email">
+                                                <span>
+                                                    <%= item.productId ? item.productId.name : 'Không có sản phẩm' %>
+                                                </span>
+                                                <span>
+                                                    <%= item.productId ? item.productId.category : 'N/A' %>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            $<%= item.productId ? item.productId.price.toFixed(2) : '0.00' %>
+                                        </td>
+                                        <td class="quantity">
+                                            <div class="input-group">
+                                                <input type="number" name="quantity"
+                                                    class="quantity form-control input-number"
+                                                    value="<%= item.quantity %>" min="1">
+                                            </div>
+                                        </td>
+                                        <td class="total-price">
+                                            $<%= item.productId ? (item.productId.price * item.quantity).toFixed(2)
+                                                : '0.00' %>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true"><i class="fa fa-close"></i></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="7">Giỏ hàng trống</td>
+                                            </tr>
+                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-<script>
-    $(document).ready(function () {
-        // Hàm để làm chậm việc thực thi lệnh (debounce)
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                const context = this;
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(context, args), wait);
-            };
-        }
+            <!-- Phần tính tổng -->
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-footer">
+                        <tfoot>
+                            <tr>
+                                <td colspan="5" class="text-right">Subtotal:</td>
+                                <td class="total-price" id="subtotal">$<%= subtotal %>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="text-right">Total:</td>
+                                <td class="total-price" id="total">$<%= subtotal %>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="text-right">
+                        <button class="btn-checkout">
+                            <a href="/checkout" style="color: white; font-weight:bold">Proceed to Checkout</a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // Hàm cập nhật tổng giỏ hàng
-        function updateCartTotals(subtotal) {
-            $('#subtotal').text('$' + subtotal);
-            $('#total').text('$' + subtotal);
-        }
+    <!-- JavaScript -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
-        // Khi xóa sản phẩm
-        $('.close').on('click', function () {
-            const row = $(this).closest('tr');
-            const productId = row.find('input[name="productId"]').val();
-
-            // Gọi API xóa sản phẩm
-            $.ajax({
-                url: '/remove-from-cart',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ productId }),
-                success: function (response) {
-                    if (response.message) {
-                        alert(response.message);
-                    }
-
-                    // Cập nhật giao diện
-                    row.remove();
-                    updateCartTotals(response.subtotal);
-                },
-                error: function (err) {
-                    console.error('Error:', err);
-                    alert('Không thể xóa sản phẩm. Vui lòng thử lại.');
-                },
-            });
-        });
-
-        // Cập nhật số lượng và tổng khi thay đổi số lượng
-        $('input[name="quantity"]').on('change', debounce(function () {
-            const row = $(this).closest('tr');
-            const productId = row.find('input[name="productId"]').val();
-            const quantity = parseInt($(this).val());
-            
-            if (quantity < 1) {
-                $(this).val(1);
-                return;
+    <script>
+        $(document).ready(function () {
+            // Hàm để làm chậm việc thực thi lệnh (debounce)
+            function debounce(func, wait) {
+                let timeout;
+                return function (...args) {
+                    const context = this;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(context, args), wait);
+                };
             }
-            
-            // Cập nhật tổng cho sản phẩm này trong giao diện trước
-            const price = parseFloat(row.find('td:nth-child(4)').text().replace('$', ''));
-            const newItemTotal = (price * quantity).toFixed(2);
-            row.find('.total-price').text('$' + newItemTotal);
-            
-            // Gửi cập nhật đến máy chủ
-            $.ajax({
-                url: '/update-cart-quantity',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ productId, quantity }),
-                success: function (response) {
-                    // Cập nhật tổng giỏ hàng từ dữ liệu trả về
-                    updateCartTotals(response.subtotal);
-                },
-                error: function (err) {
-                    console.error('Error updating quantity:', err);
-                    alert('Không thể cập nhật số lượng. Vui lòng thử lại.');
-                    
-                    // Tải lại trang nếu có lỗi
-                    location.reload();
-                }
+
+            // Hàm cập nhật tổng giỏ hàng
+            function updateCartTotals(subtotal) {
+                $('#subtotal').text('$' + subtotal);
+                $('#total').text('$' + subtotal);
+            }
+
+            // Khi xóa sản phẩm
+            $('.close').on('click', function () {
+                const row = $(this).closest('tr');
+                const productId = row.find('input[name="productId"]').val();
+
+                // Gọi API xóa sản phẩm
+                $.ajax({
+                    url: '/remove-from-cart',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ productId }),
+                    success: function (response) {
+                        if (response.message) {
+                            alert(response.message);
+                        }
+
+                        // Cập nhật giao diện
+                        row.remove();
+                        updateCartTotals(response.subtotal);
+                    },
+                    error: function (err) {
+                        console.error('Error:', err);
+                        alert('Không thể xóa sản phẩm. Vui lòng thử lại.');
+                    },
+                });
             });
-        }, 500)); // 500ms khoảng thời gian chờ
-    });
-</script>
 
-<!-- CSS -->
-<style>
-    .table-footer {
-        font-size: 18px;
-        font-weight: bold;
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
+            // Cập nhật số lượng và tổng khi thay đổi số lượng
+            $('input[name="quantity"]').on('change', debounce(function () {
+                const row = $(this).closest('tr');
+                const productId = row.find('input[name="productId"]').val();
+                const quantity = parseInt($(this).val());
 
-    .table-footer td {
-        padding: 10px;
-        border-top: 1px solid #ddd;
-    }
+                if (quantity < 1) {
+                    $(this).val(1);
+                    return;
+                }
 
-    .table-footer .total-price {
-        color: #28a745;
-        font-size: 20px;
-    }
+                // Cập nhật tổng cho sản phẩm này trong giao diện trước
+                const price = parseFloat(row.find('td:nth-child(4)').text().replace('$', ''));
+                const newItemTotal = (price * quantity).toFixed(2);
+                row.find('.total-price').text('$' + newItemTotal);
 
-    .btn-checkout {
-        background-color: #007bff;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-    }
+                // Gửi cập nhật đến máy chủ
+                $.ajax({
+                    url: '/update-cart-quantity',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ productId, quantity }),
+                    success: function (response) {
+                        // Cập nhật tổng giỏ hàng từ dữ liệu trả về
+                        updateCartTotals(response.subtotal);
+                    },
+                    error: function (err) {
+                        console.error('Error updating quantity:', err);
+                        alert('Không thể cập nhật số lượng. Vui lòng thử lại.');
 
-    .btn-checkout:hover {
-        background-color: #0056b3;
-    }
-</style>
-<%- include('layouts/footer'); %>
+                        // Tải lại trang nếu có lỗi
+                        location.reload();
+                    }
+                });
+            }, 500)); // 500ms khoảng thời gian chờ
+        });
+    </script>
+
+    <!-- CSS -->
+    <style>
+        .table-footer {
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-footer td {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .table-footer .total-price {
+            color: #28a745;
+            font-size: 20px;
+        }
+
+        .btn-checkout {
+            background-color: #000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-checkout:hover {
+            background-color: #333;
+        }
+        
+    </style>
+    <%- include('layouts/footer'); %>

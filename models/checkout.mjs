@@ -1,17 +1,17 @@
 import mongoose from 'mongoose';
-import { checkoutDBConnection } from '../config/connectDB.mjs';
+import { productDBConnection } from '../config/connectDB.mjs'; // Sửa từ checkoutDBConnection thành productDBConnection
 
 const checkoutSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', 
+    ref: 'User',
     required: true,
   },
   products: [
     {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product', 
+        ref: 'Product',
         required: true,
       },
       quantity: {
@@ -35,6 +35,6 @@ const checkoutSchema = new mongoose.Schema({
   },
 });
 
-const Checkout = checkoutDBConnection.model('Checkout', checkoutSchema);
+const Checkout = productDBConnection.model('Checkout', checkoutSchema);
 
 export default Checkout;
