@@ -48,7 +48,7 @@ router.post('/place-order', async (req, res) => {
     }
 });
 
-// Route hiển thị lịch sử đơn hàng
+// Route hiển thị lịch sử đơn hàng (trả về HTML)
 router.get('/order-history', async (req, res) => {
     try {
         const userId = req.session.userId || req.headers['x-user-id'];
@@ -82,6 +82,40 @@ router.get('/order-history', async (req, res) => {
     } catch (error) {
         console.error('Lỗi khi tải lịch sử đơn hàng:', error);
         res.status(500).send('Lỗi khi tải lịch sử đơn hàng');
+    }
+});
+
+// Route mới trả về JSON cho lịch sử đơn hàng (dùng cho Flutter)
+router.get('/order-history/json', async (req, res) => {
+    try {
+        const userId = req.session.userId || req.headers['x-user-id'];
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'Vui lòng đăng nhập để tiếp tục' });
+        }
+
+        const orders = await Checkout.find({ userId })
+            .populate('products.productId')
+            .sort({ createdAt: -1 });
+
+        // Chuyển đổi dữ liệu sang định dạng JSON phù hợp
+        const orderData = orders.map(order => ({
+            _id: order._id,
+            userId: order.userId,
+            products: order.products.map(product => ({
+                productId: product.productId._id,
+                name: product.productId.name, // Giả sử model Product có field name
+                price: product.productId.price, // Giả sử model Product có field price
+                quantity: product.quantity,
+            })),
+            totalPrice: order.totalPrice,
+            status: order.status,
+            createdAt: order.createdAt,
+        }));
+
+        res.json({ success: true, orders: orderData });
+    } catch (error) {
+        console.error('Lỗi khi tải lịch sử đơn hàng (JSON):', error);
+        res.status(500).json({ success: false, message: 'Lỗi khi tải lịch sử đơn hàng' });
     }
 });
 
