@@ -30,7 +30,8 @@ class HomeController {
       const newUser = new User({ name, email, password, confirmpassword, age });
       await newUser.save();
 
-      res.status(201).json({ success: true, message: "Đăng ký thành công." });
+      // Chuyển hướng sang trang login sau khi đăng ký thành công
+      res.redirect("/login");
     } catch (error) {
       console.error(error);
       res
@@ -64,8 +65,8 @@ class HomeController {
         res.json({
           message: "Đăng nhập thành công",
           success: true,
-          userId: user._id.toString(), // Trả về userId trực tiếp
-          user: user, // Giữ nguyên nếu cần
+          userId: user._id.toString(),
+          user: user,
         });
       });
     } catch (error) {
@@ -76,23 +77,18 @@ class HomeController {
     }
   }
 
-  // Phương thức mới để render trang index sau khi đăng nhập
   static dashboard(req, res) {
     if (!req.session.user) {
-      // Nếu chưa đăng nhập, chuyển hướng về trang login
       return res.redirect("/login");
     }
-    // Render trang index với thông tin người dùng (tuỳ chọn)
     res.render("index", {
       title: "Home Page",
       user: req.session.user,
     });
   }
 
-  // Trong HomeController
   static logout(req, res) {
     try {
-      // Hủy session của người dùng
       req.session.destroy((err) => {
         if (err) {
           console.error("Lỗi khi hủy session:", err);
@@ -100,11 +96,7 @@ class HomeController {
             .status(500)
             .json({ success: false, message: "Lỗi server khi đăng xuất." });
         }
-
-        // Xóa cookie nếu có (tùy cấu hình session của bạn)
-        res.clearCookie("connect.sid"); // "connect.sid" là tên mặc định của session cookie trong Express
-
-        // Trả về phản hồi thành công
+        res.clearCookie("connect.sid");
         res
           .status(200)
           .json({ success: true, message: "Đăng xuất thành công." });
