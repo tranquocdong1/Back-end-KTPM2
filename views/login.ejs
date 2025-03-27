@@ -23,6 +23,14 @@
             }
         }
     </script>
+    <style>
+        #error-message {
+            color: #ff4444; /* Màu đỏ cho thông báo lỗi */
+            font-size: 0.875rem; /* Kích thước chữ nhỏ */
+            margin-top: 0.5rem; /* Khoảng cách trên */
+            display: none; /* Ẩn mặc định */
+        }
+    </style>
 </head>
 <body class="bg-[url('https://images.unsplash.com/photo-1688475747567-a06ecbb15053?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZsb3dlcnMlMjBiZ3xlbnwwfHwwfHx8MA%3D%3D')] bg-cover bg-center min-h-screen flex items-center justify-center px-4">
     <div class="absolute inset-0 bg-black opacity-60"></div>
@@ -39,20 +47,21 @@
             <form id="loginForm" class="space-y-4">
                 <div>
                     <label for="email" class="block mb-2 text-sm font-medium text-pub-cream">Your email</label>
-                    <input type="email" name="email" id="email" class="w-full px-3 py-2 bg-pub-cream border border-pub-gold rounded-md text-pub-brown placeholder-pub-brown/70 focus:outline-none focus:ring-2 focus:ring-pub-gold" placeholder="name@company.com" required>
+                    <input type="email" name="email" id="email" class="w-full px-3 py-2 bg-pub-cream border border-pub-gold rounded-md text-pub-brown placeholder-pub-brown/70 focus:outline-none focus:ring-2 focus:ring-pub-gold" placeholder="name@company.com">
                 </div>
                 <div>
                     <label for="password" class="block mb-2 text-sm font-medium text-pub-cream">Password</label>
-                    <input type="password" name="password" id="password" placeholder="••••••••" class="w-full px-3 py-2 bg-pub-cream border border-pub-gold rounded-md text-pub-brown placeholder-pub-brown/70 focus:outline-none focus:ring-2 focus:ring-pub-gold" required>
+                    <input type="password" name="password" id="password" placeholder="••••••••" class="w-full px-3 py-2 bg-pub-cream border border-pub-gold rounded-md text-pub-brown placeholder-pub-brown/70 focus:outline-none focus:ring-2 focus:ring-pub-gold">
                 </div>
                 <div class="flex items-center justify-between mb-4">
-<div class="flex items-start">
+                    <div class="flex items-start">
                         <input id="remember" aria-describedby="remember" type="checkbox" class="w-4 h-4 border border-pub-gold rounded bg-pub-cream focus:ring-3 focus:ring-pub-gold">
                         <label for="remember" class="ml-2 text-sm text-pub-cream">Remember me</label>
                     </div>
                     <a href="#" class="text-sm font-medium text-pub-gold hover:underline">Forgot password?</a>
                 </div>
                 <button type="submit" class="w-full bg-pub-gold text-white py-2 px-4 rounded-md hover:bg-amber-600 transition duration-300 ease-in-out">Sign in</button>
+                <p id="error-message"></p>
                 <p class="text-sm font-light text-pub-cream mt-4">
                     Don't have an account yet? <a href="/signup" class="font-medium text-pub-gold hover:underline">Sign up</a>
                 </p>
@@ -63,8 +72,26 @@
     <script>
         document.getElementById("loginForm").addEventListener("submit", function (e) {
             e.preventDefault(); // Ngăn form submit mặc định
+
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
+            const errorMessage = document.getElementById("error-message");
+
+            // Xóa thông báo lỗi cũ
+            errorMessage.style.display = "none";
+            errorMessage.innerText = "";
+
+            // Kiểm tra client-side
+            if (!email) {
+                errorMessage.innerText = "Vui lòng nhập email";
+                errorMessage.style.display = "block";
+                return;
+            }
+            if (!password) {
+                errorMessage.innerText = "Vui lòng nhập mật khẩu";
+                errorMessage.style.display = "block";
+                return;
+            }
 
             fetch("/login", {
                 method: "POST",
@@ -76,12 +103,14 @@
                 if (data.success) {
                     window.location.href = "/";
                 } else {
-                    alert(data.message); // Hiển thị thông báo lỗi
+                    errorMessage.innerText = data.message; // Hiển thị lỗi từ backend
+                    errorMessage.style.display = "block";
                 }
             })
             .catch(error => {
                 console.error("Error:", error);
-                alert("Đã xảy ra lỗi khi đăng nhập.");
+                errorMessage.innerText = "Đã xảy ra lỗi khi đăng nhập.";
+                errorMessage.style.display = "block";
             });
         });
     </script>
